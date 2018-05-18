@@ -1,0 +1,4 @@
+<launch>
+    <env name="GOOGLE_APPLICATION_CREDENTIALS" value="$(find dialogflow_dialog)/config/service_key.json"/>
+    <node name="dialogflow_dialog" type="node.py" pkg="dialogflow_dialog" output="screen"/>
+</launch>

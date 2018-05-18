@@ -1,0 +1,9 @@
+visit https://console.dialogflow.com, and then select your agent.
+
+find out your Project ID and language.
+save the info as project_info.json
+
+{
+    "project_id": "Project ID"
+    "language_code": "language" ex) en, ko, jp
+}

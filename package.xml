@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>dialogflow_dialog</name>
+  <version>0.0.0</version>
+  <description>The dialog package for social_mind using dialogflow</description>
+
+  <maintainer email="byeongkyu@gmail.com">Byeong-Kyu Ahn</maintainer>
+  <license>MIT</license>
+
+
+  <url type="repository">https://github.com/byeongkyu/dialogflow_dialog</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>mind_msgs</build_depend>
+  <build_depend>rospy</build_depend>
+  <build_export_depend>mind_msgs</build_export_depend>
+  <build_export_depend>rospy</build_export_depend>
+  <exec_depend>mind_msgs</exec_depend>
+  <exec_depend>rospy</exec_depend>
+
+  <export>
+  </export>
+</package>
