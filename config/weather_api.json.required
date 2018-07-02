@@ -1,0 +1,6 @@
+Visit https://openweathermap.org and signup.
+Get api keys in https://home.openweathermap.org/api_keys
+
+{
+    "api_key": "---"
+}

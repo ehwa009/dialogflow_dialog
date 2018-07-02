@@ -13,8 +13,6 @@ from mind_msgs.srv import ReloadWithResult, ReadData, WriteData
 
 class Dialog:
     def __init__(self):
-        rospy.init_node('dialogflow_dialog', anonymous=False)
-
         proj_file = os.path.join(
             rospkg.RosPack().get_path('dialogflow_dialog'), 'config', 'project_info.json')
 
@@ -38,7 +36,6 @@ class Dialog:
         rospy.Subscriber('raising_events', RaisingEvents, self.handle_raise_events)
 
         rospy.loginfo('[%s] Initialzed'%rospy.get_name())
-        rospy.spin()
 
     def handle_raise_events(self, msg):
         if msg.recognized_word != '':
@@ -65,4 +62,6 @@ class Dialog:
             self.pub_reply.publish(reply_msg)
 
 if __name__ == '__main__':
+    rospy.init_node('dialogflow_dialog', anonymous=False)
     m = Dialog()
+    rospy.spin()
