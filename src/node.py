@@ -49,7 +49,8 @@ class Dialog:
 
             self.pub_reply.publish(reply_msg)
         else:
-            event_input = dialogflow.types.EventInput(name="welcome1", language_code=self.language_code)
+            event_name = "social_events_" + msg.events[0]
+            event_input = dialogflow.types.EventInput(name=event_name, language_code=self.language_code)
             query_input = dialogflow.types.QueryInput(event=event_input)
             response = self.session_client.detect_intent(session=self.session, query_input=query_input)
 
@@ -57,6 +58,7 @@ class Dialog:
 
             reply_msg = Reply()
             reply_msg.header.stamp = rospy.Time.now()
+            print response
             reply_msg.reply = response.query_result.fulfillment_text
 
             self.pub_reply.publish(reply_msg)
