@@ -14,7 +14,7 @@ from std_msgs.msg import String
 from flask import Flask, Response, request, make_response, jsonify
 
 WEATHER_TEXT = [
-    "The weather in {city} now is {current_weather_desc}. The temperature is {current_temp} degree and the wind speed is {current_wind_speed} m/s",
+    "The weather in {city} now is {current_weather_desc}, current temperature is {current_temp} degree and wind speed is {current_wind_speed} m/s.",
 ]
 
 class WebhookServer:
@@ -30,6 +30,8 @@ class WebhookServer:
         except KeyError, e:
             logging.error('Need parameter ~weather_api')
             exit(-1)
+
+        # print self.weather_api_key
 
     def run(self):
         self.app.run(host="0.0.0.0", port=self.port_num)
@@ -53,7 +55,7 @@ class WebhookServer:
     def get_weather(self, req):
         parameters = req.get('queryResult').get('parameters')
 
-        result = requests.get('http://api.openweathermap.org/data/2.5/weather?q=%s&appid=%s'%(parameters['geo-city'], '5bb301572d2ee3362cd936bcf3d20c2c'))
+        result = requests.get('http://api.openweathermap.org/data/2.5/weather?q=%s&appid=%s'%(parameters['geo-city'], self.weather_api_key['api_key']))
         weather_data = json.loads(result.text)
 
         # print weather_data
