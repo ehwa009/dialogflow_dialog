@@ -4,7 +4,7 @@
     <arg name="lt_port" default="8888"/>
 
     <node name="lt" type="run_lt" pkg="dialogflow_dialog" output="screen" args=" -s $(arg lt_subdomain) --port $(arg lt_port)" />
-    <node name="webhook_server_node" type="webhook_server_node.py" pkg="dialogflow_dialog" output="screen">
+    <node name="webhook_server_node" type="webhook_server_for_evaluation.py" pkg="dialogflow_dialog" output="screen">
         <param name="port_num" value="$(arg lt_port)" />
         <param name="weather_api" value="$(find dialogflow_dialog)/config/weather_api.json"/>
     </node>
