@@ -6,6 +6,11 @@ The dialog package for social_mind using dialogflow
 
 ### Requirements
 
+- Install Nodejs
+
+	$ curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+	$ sudo apt install -y nodejs
+
 - Install **localtunnel** (https://github.com/localtunnel/localtunnel)
 
         $ sudo npm install -g localtunnel

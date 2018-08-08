@@ -58,7 +58,7 @@ class Dialog:
 
             reply_msg = Reply()
             reply_msg.header.stamp = rospy.Time.now()
-            print response
+            #print response
             reply_msg.reply = response.query_result.fulfillment_text
 
             self.pub_reply.publish(reply_msg)
