@@ -59,9 +59,9 @@ class WebhookServer:
             res = self.get_weather(req)
         elif action == 'welcome':
             if self.current_scenario == 2: # 2: Self disclosure
-                res = "Hi there, my name is Eve. I'm a little nervous about this task, but how may I help you?"
+                res = "Hi there, my name is Nao the receptionist robot. I'm a little nervous about this task, but how may I help you?"
             else:
-                res = "Hi there, my name is Eve. How may I help you?"
+                res = "Hi there, my name is Nao the receptionist robot. How may I help you?"
         elif action == "prescription_not_ready":
             if self.current_scenario == 3: # 3: voice pitch
                 res = '''
