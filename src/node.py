@@ -56,10 +56,10 @@ class Dialog:
 
             # Seperate unnessary event or unknow event with fallback intent
 
-            reply_msg = Reply()
-            reply_msg.header.stamp = rospy.Time.now()
+            # reply_msg = Reply()
+            # reply_msg.header.stamp = rospy.Time.now()
             #print response
-            reply_msg.reply = response.query_result.fulfillment_text
+            # reply_msg.reply = response.query_result.fulfillment_text
 
             # self.pub_reply.publish(reply_msg)
 
