@@ -3,6 +3,7 @@
 
 import os
 import json
+import time
 
 import rospkg
 import rospy
@@ -10,6 +11,7 @@ import dialogflow
 
 from mind_msgs.msg import Reply, RaisingEvents
 from mind_msgs.srv import ReloadWithResult, ReadData, WriteData
+from std_msgs.msg import Empty
 
 class Dialog:
     def __init__(self):
@@ -28,14 +30,23 @@ class Dialog:
             rospy.logerr("Please, check the attribute for this error: %s"%e)
             exit()
 
+        self.session_id = int(time.time())
+
         self.session_client = dialogflow.SessionsClient()
-        self.session = self.session_client.session_path(self.project_id, 0)
+        self.session = self.session_client.session_path(self.project_id, self.session_id)
         rospy.loginfo('Session path: {}'.format(self.session))
 
         self.pub_reply = rospy.Publisher('reply', Reply, queue_size=10)
         rospy.Subscriber('raising_events', RaisingEvents, self.handle_raise_events)
+        rospy.Subscriber('change_the_session_id', Empty, self.handle_change_session_id)
 
         rospy.loginfo('[%s] Initialzed'%rospy.get_name())
+
+    def handle_change_session_id(self, msg):
+        self.session_id = int(time.time())
+        self.session = self.session_client.session_path(self.project_id, self.session_id)
+        rospy.loginfo('Session path: {}'.format(self.session))
+    
 
     def handle_raise_events(self, msg):
         if msg.recognized_word != '':
