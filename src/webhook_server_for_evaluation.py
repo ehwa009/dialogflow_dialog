@@ -87,21 +87,19 @@ class WebhookServer:
                 res = req.get('queryResult').get('fulfillmentText')
         elif action == "request_bathroom":
             if self.current_scenario == 3: # 3: voice pitch
-                res == '''
-                <prosody pitch="10%"> Certainly, the bathroom is located down the hall, second door on the right</prosody>.
+                res = '''
+                %pointing=objects:door% <prosody pitch="10%"> Certainly, the bathroom is located down the hall, second door on the right</prosody>.
                 '''
             else:
                 res = req.get('queryResult').get('fulfillmentText')
         elif action == "goodbye":
             if self.current_scenario == 3: # 3: voice pitch
-                res == '''
+                res = '''
                 <prosody pitch="10%"> I hope you have a nice day, Sam</prosody>.
                 '''
             else:
                 res = req.get('queryResult').get('fulfillmentText')
             self.pub_complete.publish()
-
-
 
         return make_response(jsonify({'fulfillmentText': res}))
 
