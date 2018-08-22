@@ -78,24 +78,24 @@ class WebhookServer:
                 No problem Sam, I forget things too sometimes.
                 I can see that you have an appointment with Dr Jones today and have checked you in. Is there anything else I can help you with?
                 '''
-            if self.current_scenario == 3: # 3: voice pitch
+            elif self.current_scenario == 3: # 3: voice pitch
                 res = '''
-                <prosody pitch="20%"> No problem Sam, I can see that you have an appointment with Dr Jones today and have checked you in</prosody>.
-                <prosody pitch="20%"> Is there anything else I can help you with</prosody>?
+                <prosody pitch="10%"> No problem Sam, I can see that you have an appointment with Dr Jones today and have checked you in</prosody>.
+                <prosody pitch="10%"> Is there anything else I can help you with</prosody>?
                 '''
             else:
                 res = req.get('queryResult').get('fulfillmentText')
         elif action == "request_bathroom":
             if self.current_scenario == 3: # 3: voice pitch
                 res == '''
-                <prosody pitch="20%"> Certainly, the bathroom is located down the hall, second door on the right</prosody>.
+                <prosody pitch="10%"> Certainly, the bathroom is located down the hall, second door on the right</prosody>.
                 '''
             else:
                 res = req.get('queryResult').get('fulfillmentText')
         elif action == "goodbye":
             if self.current_scenario == 3: # 3: voice pitch
                 res == '''
-                <prosody pitch="20%"> I hope you have a nice day, Sam</prosody>.
+                <prosody pitch="10%"> I hope you have a nice day, Sam</prosody>.
                 '''
             else:
                 res = req.get('queryResult').get('fulfillmentText')
