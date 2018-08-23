@@ -46,7 +46,7 @@ class Dialog:
         self.session_id = int(time.time())
         self.session = self.session_client.session_path(self.project_id, self.session_id)
         rospy.loginfo('Session path: {}'.format(self.session))
-    
+
 
     def handle_raise_events(self, msg):
         if msg.recognized_word != '':
@@ -60,9 +60,25 @@ class Dialog:
 
             self.pub_reply.publish(reply_msg)
         else:
-            event_name = "social_events_" + msg.events[0]
-            event_input = dialogflow.types.EventInput(name=event_name, language_code=self.language_code)
-            query_input = dialogflow.types.QueryInput(event=event_input)
+            # Temporary
+            if 'silency_detected' in msg.events:
+                event_name = "social_events_" + 'silency_detected'
+                event_input = dialogflow.types.EventInput(name=event_name, language_code=self.language_code)
+                query_input = dialogflow.types.QueryInput(event=event_input)
+                response = self.session_client.detect_intent(session=self.session, query_input=query_input)
+
+                # Seperate unnessary event or unknow event with fallback intent
+
+                reply_msg = Reply()
+                reply_msg.header.stamp = rospy.Time.now()
+                #print response
+                reply_msg.reply = response.query_result.fulfillment_text
+
+                self.pub_reply.publish(reply_msg)
+
+            #event_name = "social_events_" + msg.events[0]
+            #event_input = dialogflow.types.EventInput(name=event_name, language_code=self.language_code)
+            #query_input = dialogflow.types.QueryInput(event=event_input)
             # response = self.session_client.detect_intent(session=self.session, query_input=query_input)
 
             # Seperate unnessary event or unknow event with fallback intent
