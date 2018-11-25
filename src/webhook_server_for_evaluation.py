@@ -55,51 +55,72 @@ class WebhookServer:
             rospy.logwarn('JSON error from fulfillment request')
             return "json error"
 
-        if action == 'weather':
+        if action == 'intro':
+            res = "<expression=happiness:1.0>Hello! everyone? <br=1> <expression=happiness:0.9>Welcome to the Center for Automation and Robotic Engineering Science. <br=1>"
+            res += "<expression=happiness:0.8>We are an interdisciplinary research hub. <br=0> \n"
+            res += "<expression=happiness:1.0>My name is EveR. I am an android robot.  <br=1> \n"
+            res += "<expression=happiness:0.7>It is so nice weather for looking around our lab. isn't it? <br=0> \n"
+            res += "<expression=happiness:1.0>From now on, I will speak Korean to interact with you. <br=0> \n"
+            res += "안녕하세요 문재인 대통령님, 저는 휴머노이드 로봇 에버입니다. <br=0> \n"
+            res += "저희 연구실에 오신걸 진심으로 환영합니다! <br=0>"
+            res += "<expression=happiness:0.7>대통령님께 몇가지 보여드릴게 있어요. <br=1>"
+        elif action == 'face':
+            res = '''<expression=happiness:0.5>네 알겠어요. <br=1> \n
+                    <expression=happiness:0.8>저는 여러분들과 감정 교류를 위해서 많은 표정을 지을수 있어요. <br=1>\n
+                    <expression=happiness:0.5>바로 이렇게요. <br=0>
+                    <expression=happiness:1.0> <br=4> \n
+                    누군가 저를 화나게 한다면 이렇게요, <expression=anger:1.0> <br=4> \n
+                    먼가 안좋은걸 봤을때는 이렇게요, <expression=disgust:1.0> <br=4> \n
+                    무서울때는 이렇게요, <expression=fear:1.0> <br=4> \n
+                    슬플때는, <expression=sadness:1.0> <br=4> \n
+                    놀랐을때는, <expression=surprise:1.0> <br=4> \n
+                    <expression=happiness:0.5> <br=3> 제 표정 어떠셧나요? 괜찮았나요? <br=1>
+                    '''
+        elif action == 'weather':
             res = self.get_weather(req)
-        elif action == 'welcome':
-            if self.current_scenario == 2: # 2: Self disclosure
-                res = "Hi there, my name is Nao, the receptionist robot. I'm a little nervous about this task, but how may I help you?"
-            else:
-                res = "Hi there, my name is Nao, the receptionist robot. How may I help you?"
-        elif action == "prescription_not_ready":
-            if self.current_scenario == 3: # 3: voice pitch
-                res = '''
-                <prosody pitch="-15%"> I'm sorry Sam, your doctor has not yet written your prescription and so it is not ready for collection at the moment</prosody>.
-                <prosody pitch="-15%"> However, I have sent a message to your doctor</prosody>.
-                <prosody pitch="-15%"> Once the prescription has been written, someone will call you and let you know</prosody>.
-                <prosody pitch="-15%"> Is there anything else I can help you with</prosody>?
-                '''
-            else:
-                res = req.get('queryResult').get('fulfillmentText')
-        elif action == "dontknow_doctor_name":
-            if self.current_scenario == 2: # 2: Self disclosure
-                res = '''
-                No problem Sam, I forget things too sometimes.
-                I can see that you have an appointment with Dr Jones today and have checked you in. Is there anything else I can help you with?
-                '''
-            elif self.current_scenario == 3: # 3: voice pitch
-                res = '''
-                <prosody pitch="10%"> No problem Sam, I can see that you have an appointment with Dr Jones today and have checked you in</prosody>.
-                <prosody pitch="10%"> Is there anything else I can help you with</prosody>?
-                '''
-            else:
-                res = req.get('queryResult').get('fulfillmentText')
-        elif action == "request_bathroom":
-            if self.current_scenario == 3: # 3: voice pitch
-                res = '''
-                %pointing=objects:door% <prosody pitch="10%"> Certainly, the bathroom is located down the hall, second door on the right</prosody>.
-                '''
-            else:
-                res = req.get('queryResult').get('fulfillmentText')
-        elif action == "goodbye":
-            if self.current_scenario == 3: # 3: voice pitch
-                res = '''
-                <prosody pitch="10%"> I hope you have a nice day, Sam</prosody>.
-                '''
-            else:
-                res = req.get('queryResult').get('fulfillmentText')
-            self.pub_complete.publish()
+        # elif action == 'welcome':
+        #     if self.current_scenario == 2: # 2: Self disclosure
+        #         res = "Hi there, my name is Nao, the receptionist robot. I'm a little nervous about this task, but how may I help you?"
+        #     else:
+        #         res = "Hi there, my name is Nao, the receptionist robot. How may I help you?"
+        # elif action == "prescription_not_ready":
+        #     if self.current_scenario == 3: # 3: voice pitch
+        #         res = '''
+        #         <prosody pitch="-15%"> I'm sorry Sam, your doctor has not yet written your prescription and so it is not ready for collection at the moment</prosody>.
+        #         <prosody pitch="-15%"> However, I have sent a message to your doctor</prosody>.
+        #         <prosody pitch="-15%"> Once the prescription has been written, someone will call you and let you know</prosody>.
+        #         <prosody pitch="-15%"> Is there anything else I can help you with</prosody>?
+        #         '''
+        #     else:
+        #         res = req.get('queryResult').get('fulfillmentText')
+        # elif action == "dontknow_doctor_name":
+        #     if self.current_scenario == 2: # 2: Self disclosure
+        #         res = '''
+        #         No problem Sam, I forget things too sometimes.
+        #         I can see that you have an appointment with Dr Jones today and have checked you in. Is there anything else I can help you with?
+        #         '''
+        #     elif self.current_scenario == 3: # 3: voice pitch
+        #         res = '''
+        #         <prosody pitch="10%"> No problem Sam, I can see that you have an appointment with Dr Jones today and have checked you in</prosody>.
+        #         <prosody pitch="10%"> Is there anything else I can help you with</prosody>?
+        #         '''
+        #     else:
+        #         res = req.get('queryResult').get('fulfillmentText')
+        # elif action == "request_bathroom":
+        #     if self.current_scenario == 3: # 3: voice pitch
+        #         res = '''
+        #         %pointing=objects:door% <prosody pitch="10%"> Certainly, the bathroom is located down the hall, second door on the right</prosody>.
+        #         '''
+        #     else:
+        #         res = req.get('queryResult').get('fulfillmentText')
+        # elif action == "goodbye":
+        #     if self.current_scenario == 3: # 3: voice pitch
+        #         res = '''
+        #         <prosody pitch="10%"> I hope you have a nice day, Sam</prosody>.
+        #         '''
+        #     else:
+        #         res = req.get('queryResult').get('fulfillmentText')
+        #     self.pub_complete.publish()
 
         return make_response(jsonify({'fulfillmentText': res}))
 
