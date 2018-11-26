@@ -15,6 +15,7 @@ from flask import Flask, Response, request, make_response, jsonify
 
 WEATHER_TEXT = [
     "The weather in {city} now is {current_weather_desc}, current temperature is {current_temp} degree and wind speed is {current_wind_speed} m/s.",
+    "오늘 {city}의 날씨는 섭씨 {current_temp}도 이고 풍속은 {current_wind_speed} m/s 입니다. 꽤 선선한 날씨이네요."
 ]
 
 class WebhookServer:
@@ -36,7 +37,7 @@ class WebhookServer:
             logging.error('Need parameter ~weather_api')
             exit(-1)
 
-        # print self.weather_api_key
+        # print self.weather_api_key        
 
     def run(self):
         self.app.run(host="0.0.0.0", port=self.port_num)
@@ -55,7 +56,7 @@ class WebhookServer:
             rospy.logwarn('JSON error from fulfillment request')
             return "json error"
 
-        if action == 'intro':
+        if action == 'intro_moon':
             res = "<expression=happiness:1.0>Hello! everyone? <br=1> <expression=happiness:0.9>Welcome to the Center for Automation and Robotic Engineering Science. <br=1>"
             res += "<expression=happiness:0.8>We are an interdisciplinary research hub. <br=0> \n"
             res += "<expression=happiness:1.0>My name is EveR. I am an android robot.  <br=1> \n"
@@ -63,8 +64,8 @@ class WebhookServer:
             res += "<expression=happiness:1.0>From now on, I will speak Korean to interact with you. <br=0> \n"
             res += "안녕하세요 문재인 대통령님, 저는 휴머노이드 로봇 에버입니다. <br=0> \n"
             res += "저희 연구실에 오신걸 진심으로 환영합니다! <br=0>"
-            res += "<expression=happiness:0.7>대통령님께 몇가지 보여드릴게 있어요. <br=1>"
-        elif action == 'face':
+            res += "<expression=happiness:0.7>대통령님께 제 모습을 보여드리기 위해서 많은 연습을 했답니다. <br=1>"
+        elif action == 'face_kor':
             res = '''<expression=happiness:0.5>네 알겠어요. <br=1> \n
                     <expression=happiness:0.8>저는 여러분들과 감정 교류를 위해서 많은 표정을 지을수 있어요. <br=1>\n
                     <expression=happiness:0.5>바로 이렇게요. <br=0>
@@ -76,8 +77,13 @@ class WebhookServer:
                     놀랐을때는, <expression=surprise:1.0> <br=4> \n
                     <expression=happiness:0.5> <br=3> 제 표정 어떠셧나요? 괜찮았나요? <br=1>
                     '''
-        elif action == 'weather':
-            res = self.get_weather(req)
+        elif action == 'weather_eng':
+            res = self.get_weather_eng(req)
+        elif action == 'weather_kor':
+            res = self.get_weather_kor(req)
+        
+        
+        
         # elif action == 'welcome':
         #     if self.current_scenario == 2: # 2: Self disclosure
         #         res = "Hi there, my name is Nao, the receptionist robot. I'm a little nervous about this task, but how may I help you?"
@@ -124,9 +130,13 @@ class WebhookServer:
 
         return make_response(jsonify({'fulfillmentText': res}))
 
-    def get_weather(self, req):
+    def get_weather_eng(self, req):
         parameters = req.get('queryResult').get('parameters')
-
+        # default city
+        if len(parameters['geo-city'])<1:
+            parameters = {
+                'geo-city' : 'Auckland'
+            }
         result = requests.get('http://api.openweathermap.org/data/2.5/weather?q=%s&appid=%s'%(parameters['geo-city'], self.weather_api_key['api_key']))
         weather_data = json.loads(result.text)
 
@@ -138,8 +148,29 @@ class WebhookServer:
         current_temp = weather_data['main']['temp'] - 273.15 # Kelvin to Celcius
         current_wind_speed = weather_data['wind']['speed']
 
-        output_string = random.choice(WEATHER_TEXT)
+        output_string = WEATHER_TEXT[0]
         return output_string.format(city=current_city, current_weather_desc=current_weather_desc, current_temp=current_temp, current_wind_speed=current_wind_speed)
+
+    def get_weather_kor(self, req):
+        parameters = req.get('queryResult').get('parameters')
+        # default city
+        if len(parameters['geo-city'])<1:
+            parameters = {
+                'geo-city' : 'Auckland'
+            }
+        result = requests.get('http://api.openweathermap.org/data/2.5/weather?q=%s&appid=%s'%(parameters['geo-city'], self.weather_api_key['api_key']))
+        weather_data = json.loads(result.text)
+
+        # print weather_data
+
+        current_city = weather_data['name']
+        current_weather = weather_data['weather'][0]['main']
+        current_weather_desc = weather_data['weather'][0]['description']
+        current_temp = weather_data['main']['temp'] - 273.15 # Kelvin to Celcius
+        current_wind_speed = weather_data['wind']['speed']
+
+        output_string = WEATHER_TEXT[1]
+        return output_string.format(city=current_city, current_temp=current_temp, current_wind_speed=current_wind_speed)
 
 
 if __name__ == '__main__':
